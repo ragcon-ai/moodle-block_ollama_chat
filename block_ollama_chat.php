@@ -17,14 +17,16 @@
 /**
  * Block class
  *
- * @package    block_openai_chat
+ * @package    block_ollama_chat
+ * @copyright  2025 RAGCon <info@ragcon.ai>
  * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @original   Forked from block_openai_chat by Bryce Yoder <me@bryceyoder.com>
  */
 
-class block_openai_chat extends block_base {
+class block_ollama_chat extends block_base {
     public function init() {
-        $this->title = get_string('openai_chat', 'block_openai_chat');
+        $this->title = get_string('ollama_chat', 'block_ollama_chat');
     }
 
     public function has_config() {
@@ -50,13 +52,13 @@ class block_openai_chat extends block_base {
         }
 
         // Send data to front end
-        $persistconvo = get_config('block_openai_chat', 'persistconvo');
+        $persistconvo = get_config('block_ollama_chat', 'persistconvo');
         if (!empty($this->config)) {
-            $persistconvo = (property_exists($this->config, 'persistconvo') && get_config('block_openai_chat', 'allowinstancesettings')) ? $this->config->persistconvo : $persistconvo;
+            $persistconvo = (property_exists($this->config, 'persistconvo') && get_config('block_ollama_chat', 'allowinstancesettings')) ? $this->config->persistconvo : $persistconvo;
         }
-        $this->page->requires->js_call_amd('block_openai_chat/lib', 'init', [[
+        $this->page->requires->js_call_amd('block_ollama_chat/lib', 'init', [[
             'blockId' => $this->instance->id,
-            'api_type' => get_config('block_openai_chat', 'type') ? get_config('block_openai_chat', 'type') : 'chat',
+            'api_type' => get_config('block_ollama_chat', 'type') ? get_config('block_ollama_chat', 'type') : 'chat',
             'persistConvo' => $persistconvo
         ]]);
 
@@ -74,8 +76,8 @@ class block_openai_chat extends block_base {
         }
 
         // First, fetch the global settings for these (and the defaults if not set)
-        $assistantname = get_config('block_openai_chat', 'assistantname') ? get_config('block_openai_chat', 'assistantname') : get_string('defaultassistantname', 'block_openai_chat');
-        $username = get_config('block_openai_chat', 'username') ? get_config('block_openai_chat', 'username') : get_string('defaultusername', 'block_openai_chat');
+        $assistantname = get_config('block_ollama_chat', 'assistantname') ? get_config('block_ollama_chat', 'assistantname') : get_string('defaultassistantname', 'block_ollama_chat');
+        $username = get_config('block_ollama_chat', 'username') ? get_config('block_ollama_chat', 'username') : get_string('defaultusername', 'block_ollama_chat');
 
         // Then, override with local settings if available
         if (!empty($this->config)) {
@@ -102,24 +104,24 @@ class block_openai_chat extends block_base {
                 }
             </style>
 
-            <div id="openai_chat_log" role="log"></div>
+            <div id="ollama_chat_log" role="log"></div>
         ';
 
         if (
-            empty(get_config('block_openai_chat', 'apikey')) && 
-            (!get_config('block_openai_chat', 'allowinstancesettings') || empty($this->config->apikey))
+            empty(get_config('block_ollama_chat', 'apikey')) && 
+            (!get_config('block_ollama_chat', 'allowinstancesettings') || empty($this->config->apikey))
         ) {
-            $this->content->footer = get_string('apikeymissing', 'block_openai_chat');
+            $this->content->footer = get_string('apikeymissing', 'block_ollama_chat');
         } else {
             $contextdata = [
-                'logging_enabled' => get_config('block_openai_chat', 'logging'),
+                'logging_enabled' => get_config('block_ollama_chat', 'logging'),
                 'is_edit_mode' => $PAGE->user_is_editing(),
-                'pix_popout' => '/blocks/openai_chat/pix/arrow-up-right-from-square.svg',
-                'pix_arrow_right' => '/blocks/openai_chat/pix/arrow-right.svg',
-                'pix_refresh' => '/blocks/openai_chat/pix/refresh.svg',
+                'pix_popout' => '/blocks/ollama_chat/pix/arrow-up-right-from-square.svg',
+                'pix_arrow_right' => '/blocks/ollama_chat/pix/arrow-right.svg',
+                'pix_refresh' => '/blocks/ollama_chat/pix/refresh.svg',
             ];
 
-            $this->content->footer = $OUTPUT->render_from_template('block_openai_chat/control_bar', $contextdata);
+            $this->content->footer = $OUTPUT->render_from_template('block_ollama_chat/control_bar', $contextdata);
         }
 
         return $this->content;

@@ -17,17 +17,18 @@
 /**
  * Class providing completions for chat models (3.5 and up)
  *
- * @package    block_openai_chat
+ * @package    block_ollama_chat
+ * @copyright  2025 RAGCon <info@ragcon.ai>
  * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ * @original   Forked from block_openai_chat by Bryce Yoder <me@bryceyoder.com>
+ */
+namespace block_ollama_chat\completion;
 
-namespace block_openai_chat\completion;
-
-use block_openai_chat\completion;
+use block_ollama_chat\completion;
 defined('MOODLE_INTERNAL') || die;
 
-class chat extends \block_openai_chat\completion {
+class chat extends \block_ollama_chat\completion {
 
     public function __construct($model, $message, $history, $block_settings, $thread_id = null) {
         parent::__construct($model, $message, $history, $block_settings);
@@ -40,7 +41,7 @@ class chat extends \block_openai_chat\completion {
     public function create_completion($context) {
         if ($this->sourceoftruth) {
             $this->sourceoftruth = format_string($this->sourceoftruth, true, ['context' => $context]);
-            $this->prompt .= get_string('sourceoftruthreinforcement', 'block_openai_chat');
+            $this->prompt .= get_string('sourceoftruthreinforcement', 'block_ollama_chat');
         }
         $this->prompt .= "\n\n";
 
@@ -91,7 +92,8 @@ class chat extends \block_openai_chat\completion {
             ),
         ));
 
-        $response = $curl->post("https://api.openai.com/v1/chat/completions", json_encode($curlbody));
+        $apiendpoint = get_config('block_ollama_chat', 'apiendpoint');
+        $response = $curl->post($apiendpoint."/v1/chat/completions", json_encode($curlbody));
         $response = json_decode($response);
 
         $message = null;

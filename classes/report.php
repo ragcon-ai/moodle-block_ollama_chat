@@ -17,12 +17,14 @@
 /**
  * Log table
  *
- * @package    block_openai_chat
+ * @package    block_ollama_chat
+ * @copyright  2025 RAGCon <info@ragcon.ai>
  * @copyright  2024 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @original   Forked from block_openai_chat by Bryce Yoder <me@bryceyoder.com>
  */
 
-namespace block_openai_chat;
+namespace block_ollama_chat;
 defined('MOODLE_INTERNAL') || die;
 
 class report extends \table_sql {

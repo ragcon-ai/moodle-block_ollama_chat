@@ -17,17 +17,18 @@
 /**
  * Class providing completions for assistant API
  *
- * @package    block_openai_chat
+ * @package    block_ollama_chat
+ * @copyright  2025 RAGCon <info@ragcon.ai>
  * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ * @original   Forked from block_openai_chat by Bryce Yoder <me@bryceyoder.com>
+ */
+namespace block_ollama_chat\completion;
 
-namespace block_openai_chat\completion;
-
-use block_openai_chat\completion;
+use block_ollama_chat\completion;
 defined('MOODLE_INTERNAL') || die;
 
-class assistant extends \block_openai_chat\completion {
+class assistant extends \block_ollama_chat\completion {
 
     private $thread_id;
 
@@ -59,8 +60,8 @@ class assistant extends \block_openai_chat\completion {
                 'OpenAI-Beta: assistants=v2'
             ),
         ));
-
-        $response = $curl->post("https://api.openai.com/v1/threads");
+        $apiendpoint = get_config('block_ollama_chat', 'apiendpoint');
+        $response = $curl->post($apiendpoint."/v1/threads");
         $response = json_decode($response);
 
         return $response->id;
@@ -81,8 +82,9 @@ class assistant extends \block_openai_chat\completion {
             ),
         ));
 
+        $apiendpoint = get_config('block_ollama_chat', 'apiendpoint');
         $response = $curl->post(
-            "https://api.openai.com/v1/threads/" . $this->thread_id ."/messages", 
+                $apiendpoint."/v1/threads/" . $this->thread_id ."/messages",
             json_encode($curlbody)
         );
         $response = json_decode($response);
@@ -146,7 +148,8 @@ class assistant extends \block_openai_chat\completion {
                 'OpenAI-Beta: assistants=v2'
             ),
         ));
-        $response = $curl->get("https://api.openai.com/v1/threads/" . $this->thread_id . '/messages');
+        $apiendpoint = get_config('block_ollama_chat', 'apiendpoint');
+        $response = $curl->get($apiendpoint."/v1/threads/" . $this->thread_id . '/messages');
         $response = json_decode($response);
 
         return [
@@ -165,8 +168,8 @@ class assistant extends \block_openai_chat\completion {
                 'OpenAI-Beta: assistants=v2'
             ),
         ));
-
-        $response = $curl->get("https://api.openai.com/v1/threads/" . $this->thread_id . "/runs/" . $run_id);
+        $apiendpoint = get_config('block_ollama_chat', 'apiendpoint');
+        $response = $curl->get($apiendpoint."/v1/threads/" . $this->thread_id . "/runs/" . $run_id);
         $response = json_decode($response);
         
         if ($response->status === 'completed' || property_exists($response, 'error')) {

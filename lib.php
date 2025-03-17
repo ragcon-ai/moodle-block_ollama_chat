@@ -17,9 +17,11 @@
 /**
  * General plugin functions
  *
- * @package    block_openai_chat
+ * @package    block_ollama_chat
+ * @copyright  2025 RAGCon <info@ragcon.ai>
  * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @original   Forked from block_openai_chat by Bryce Yoder <me@bryceyoder.com>
  */
 
 defined('MOODLE_INTERNAL') || die();
@@ -29,7 +31,7 @@ defined('MOODLE_INTERNAL') || die();
  * @return String: the API type (chat|azure|assistant)
  */
 function get_type_to_display() {
-    $stored_type = get_config('block_openai_chat', 'type');
+    $stored_type = get_config('block_ollama_chat', 'type');
     if ($stored_type) {
         return $stored_type;
     }
@@ -46,11 +48,11 @@ function fetch_assistants_array($block_id = null) {
     global $DB;
 
     if (!$block_id) {
-        $apikey = get_config('block_openai_chat', 'apikey');
+        $apikey = get_config('block_ollama_chat', 'apikey');
     } else {
-        $instance_record = $DB->get_record('block_instances', ['blockname' => 'openai_chat', 'id' => $block_id], '*');
-        $instance = block_instance('openai_chat', $instance_record);
-        $apikey = $instance->config->apikey ? $instance->config->apikey : get_config('block_openai_chat', 'apikey');
+        $instance_record = $DB->get_record('block_instances', ['blockname' => 'ollama_chat', 'id' => $block_id], '*');
+        $instance = block_instance('ollama_chat', $instance_record);
+        $apikey = $instance->config->apikey ? $instance->config->apikey : get_config('block_ollama_chat', 'apikey');
     }
 
     if (!$apikey) {
@@ -65,8 +67,8 @@ function fetch_assistants_array($block_id = null) {
             'OpenAI-Beta: assistants=v2'
         ),
     ));
-
-    $response = $curl->get("https://api.openai.com/v1/assistants?order=desc");
+    $apiendpoint = get_config('block_ollama_chat', 'apiendpoint');
+    $response = $curl->get($apiendpoint."/v1/assistants?order=desc");
     $response = json_decode($response);
     $assistant_array = [];
     if (property_exists($response, 'data')) {
@@ -87,48 +89,14 @@ function fetch_assistants_array($block_id = null) {
 function get_models() {
     return [
         "models" => [
-            'gpt-4o' => 'gpt-4o',
-            'gpt-4o-2024-11-20' => 'gpt-4o-2024-11-20',
-            'gpt-4o-2024-08-06' => 'gpt-4o-2024-08-06',
-            'gpt-4o-2024-05-13' => 'gpt-4o-2024-05-13',
-            'gpt-4o-mini-2024-07-18' => 'gpt-4o-mini-2024-07-18',
-            'gpt-4o-mini' => 'gpt-4o-mini',
-            'gpt-4-turbo-preview' => 'gpt-4-turbo-preview',
-            'gpt-4-turbo-2024-04-09' => 'gpt-4-turbo-2024-04-09',
-            'gpt-4-turbo' => 'gpt-4-turbo',
-            'gpt-4-32k-0314' => 'gpt-4-32k-0314',
-            'gpt-4-1106-preview' => 'gpt-4-1106-preview',
-            'gpt-4-0613' => 'gpt-4-0613',
-            'gpt-4-0314' => 'gpt-4-0314',
-            'gpt-4-0125-preview' => 'gpt-4-0125-preview',
-            'gpt-4' => 'gpt-4',
-            'gpt-3.5-turbo-16k-0613' => 'gpt-3.5-turbo-16k-0613',
-            'gpt-3.5-turbo-16k' => 'gpt-3.5-turbo-16k',
-            'gpt-3.5-turbo-1106' => 'gpt-3.5-turbo-1106',
-            'gpt-3.5-turbo-0125' => 'gpt-3.5-turbo-0125',
-            'gpt-3.5-turbo' => 'gpt-3.5-turbo'
+            'llama3.1:8b' => 'llama3.1:8b',
+            'llama3.2:3b' => 'llama3.2:3b',
+            'tinyllama:latest' => 'tinyllama:latest'
         ],
         "types" => [
-            'gpt-4o-2024-11-20'          =>  'chat',
-            'gpt-4o-2024-08-06'          =>  'chat',
-            'gpt-4o-2024-05-13'          =>  'chat',
-            'gpt-4o'                     =>  'chat',
-            'gpt-4o-mini-2024-07-18'     =>  'chat',
-            'gpt-4o-mini'                =>  'chat',
-            'gpt-4-turbo-preview'        =>  'chat',
-            'gpt-4-turbo-2024-04-09'     =>  'chat',
-            'gpt-4-turbo'                =>  'chat',
-            'gpt-4-32k-0314'             =>  'chat',
-            'gpt-4-1106-preview'         =>  'chat',
-            'gpt-4-0613'                 =>  'chat',
-            'gpt-4-0314'                 =>  'chat',
-            'gpt-4-0125-preview'         =>  'chat',
-            'gpt-4'                      =>  'chat',
-            'gpt-3.5-turbo-16k-0613'     =>  'chat',
-            'gpt-3.5-turbo-16k'          =>  'chat',
-            'gpt-3.5-turbo-1106'         =>  'chat',
-            'gpt-3.5-turbo-0125'         =>  'chat',
-            'gpt-3.5-turbo'              =>  'chat'
+            'llama3.1:8b'          =>  'chat',
+            'llama3.2:3b'          =>  'chat',
+            'tinyllama:latest'          =>  'chat'
         ]
     ];
 }
@@ -141,11 +109,11 @@ function get_models() {
 function log_message($usermessage, $airesponse, $context) {
     global $USER, $DB;
 
-    if (!get_config('block_openai_chat', 'logging')) {
+    if (!get_config('block_ollama_chat', 'logging')) {
         return;
     }
 
-    $DB->insert_record('block_openai_chat_log', (object) [
+    $DB->insert_record('block_ollama_chat_log', (object) [
         'userid' => $USER->id,
         'usermessage' => $usermessage,
         'airesponse' => $airesponse,
@@ -154,11 +122,11 @@ function log_message($usermessage, $airesponse, $context) {
     ]);
 }
 
-function block_openai_chat_extend_navigation_course($nav, $course, $context) {
+function block_ollama_chat_extend_navigation_course($nav, $course, $context) {
     if ($nav->get('coursereports')) {
         $nav->get('coursereports')->add(
-            get_string('openai_chat_logs', 'block_openai_chat'),
-            new moodle_url('/blocks/openai_chat/report.php', ['courseid' => $course->id]),
+            get_string('ollama_chat_logs', 'block_ollama_chat'),
+            new moodle_url('/blocks/ollama_chat/report.php', ['courseid' => $course->id]),
             navigation_node::TYPE_SETTING,
             null
         );

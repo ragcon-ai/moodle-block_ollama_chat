@@ -17,16 +17,18 @@
 /**
  * Define capabilities
  *
- * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
+ * @package    block_ollama_chat
+ * @copyright  2025 RAGCon <info@ragcon.ai>
+ * @copyright  2025 RAGCon <info@ragcon.ai>
+ * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @original   Forked from block_openai_chat by Bryce Yoder <me@bryceyoder.com>
  */
-
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
 
-    'block/openai_chat:myaddinstance' => array(
+    'block/ollama_chat:myaddinstance' => array(
         'captype' => 'write',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => array(
@@ -36,7 +38,7 @@ $capabilities = array(
         'clonepermissionsfrom' => 'moodle/my:manageblocks'
     ),
 
-    'block/openai_chat:addinstance' => array(
+    'block/ollama_chat:addinstance' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
 
         'captype' => 'write',
@@ -49,7 +51,7 @@ $capabilities = array(
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
 
-    'block/openai_chat:viewreport' => array(
+    'block/ollama_chat:viewreport' => array(
         'riskbitmask' => RISK_PERSONAL,
         'captype' => 'read',
         'contextlevel' => CONTEXT_COURSE,

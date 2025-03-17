@@ -17,20 +17,22 @@
 /**
  * API endpoint for retrieving GPT completion
  *
- * @package    block_openai_chat
+ * @package    block_ollama_chat
+ * @copyright  2025 RAGCon <info@ragcon.ai>
  * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @original   Forked from block_openai_chat by Bryce Yoder <me@bryceyoder.com>
  */
 
-use \block_openai_chat\completion;
+use \block_ollama_chat\completion;
 
 require_once('../../../config.php');
 require_once($CFG->libdir . '/filelib.php');
-require_once($CFG->dirroot . '/blocks/openai_chat/lib.php');
+require_once($CFG->dirroot . '/blocks/ollama_chat/lib.php');
 
 global $DB, $PAGE;
 
-if (get_config('block_openai_chat', 'restrictusage') !== "0") {
+if (get_config('block_ollama_chat', 'restrictusage') !== "0") {
     require_login();
 }
 
@@ -47,8 +49,8 @@ $thread_id = clean_param($body['threadId'], PARAM_NOTAGS, true);
 
 // So that we're not leaking info to the client like API key, the block makes an API request including its ID
 // Then we can look up that specific block to pull out its config data
-$instance_record = $DB->get_record('block_instances', ['blockname' => 'openai_chat', 'id' => $block_id], '*');
-$instance = block_instance('openai_chat', $instance_record);
+$instance_record = $DB->get_record('block_instances', ['blockname' => 'ollama_chat', 'id' => $block_id], '*');
+$instance = block_instance('ollama_chat', $instance_record);
 if (!$instance) {
     print_error('invalidblockinstance', 'error', $id);
 }
@@ -81,9 +83,9 @@ foreach ($setting_names as $setting) {
 }
 
 $engine_class;
-$model = get_config('block_openai_chat', 'model');
-$api_type = get_config('block_openai_chat', 'type');
-$engine_class = "\block_openai_chat\completion\\$api_type";
+$model = get_config('block_ollama_chat', 'model');
+$api_type = get_config('block_ollama_chat', 'type');
+$engine_class = "\block_ollama_chat\completion\\$api_type";
 
 $completion = new $engine_class(...[$model, $message, $history, $block_settings, $thread_id]);
 $response = $completion->create_completion($PAGE->context);

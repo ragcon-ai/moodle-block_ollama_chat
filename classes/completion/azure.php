@@ -17,17 +17,18 @@
 /**
  * Class providing completions for Azure
  *
- * @package    block_openai_chat
+ * @package    block_ollama_chat
+ * @copyright  2025 RAGCon <info@ragcon.ai>
  * @copyright  2024 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
-*/
+ * @original   Forked from block_openai_chat by Bryce Yoder <me@bryceyoder.com>
+ */
+namespace block_ollama_chat\completion;
 
-namespace block_openai_chat\completion;
-
-use block_openai_chat\completion;
+use block_ollama_chat\completion;
 defined('MOODLE_INTERNAL') || die;
 
-class azure extends \block_openai_chat\completion\chat {
+class azure extends \block_ollama_chat\completion\chat {
 
     private $resourcename;
     private $deploymentid;
@@ -48,7 +49,7 @@ class azure extends \block_openai_chat\completion\chat {
     public function create_completion($context) {
         if ($this->sourceoftruth) {
             $this->sourceoftruth = format_string($this->sourceoftruth, true, ['context' => $context]);
-            $this->prompt .= get_string('sourceoftruthreinforcement', 'block_openai_chat');
+            $this->prompt .= get_string('sourceoftruthreinforcement', 'block_ollama_chat');
         }
         $this->prompt .= "\n\n";
 

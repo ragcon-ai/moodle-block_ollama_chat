@@ -1,19 +1,19 @@
-# moodle-block_openai_chat
+# moodle-block_ollama_chat
 
-<img align="right" src="https://github.com/Limekiller/moodle-block_openai_chat/assets/33644013/21f73adc-5bd4-4539-999b-a3b0a83736e0" />
+<img align="right" src="https://github.com/Limekiller/moodle-block_ollama_chat/assets/33644013/21f73adc-5bd4-4539-999b-a3b0a83736e0" />
 
-### GPT powered AI chat block for Moodle
+### Ollama chat block for Moodle
+#### This block is a fork of [block_openai_chat](https://moodle.org/plugins/block_openai_chat) by Bryce Yoder. 
+This block uses an Ollama server instead of OpenAI API.
 
-This block allows your Moodle users to get 24/7 chat support via OpenAI's GPT AI. The block offers multiple options for customizing the persona of the AI and the prompt it is given, in order to influence the text it outputs.
-
-To get started, create an OpenAI account [here](https://openai.com/api/). **This plugin requries a commercial subscription via a paid OpenAI account. For more information on purchasing a subscription, please see the aforementioned link. Once a paid account is created, all you need to do is add the API key to the plugin settings.**
-
-This plugin supports both the [Chat API](https://platform.openai.com/docs/guides/chat) and the [Assistant API](https://platform.openai.com/docs/assistants/overview).
+To get started, you need an [Ollama](https://github.com/ollama/ollama) Installation.
+**For commercial support, RAGCon GmbH i.G. is happy to assist you. Visit our homepage at [https://www.ragcon.ai](https://www.ragcon.ai)**
 
 # Global block settings
 
 The global block settings can be found by going to Site Administration > Plugins > Blocks > OpenAI Chat Block. The options are:
--  **OpenAI API Key:** This is where you add the API key given to you by OpenAI
+-  **Ollama Endpoint:** The URL of your Ollama API
+-  **Ollama API Key:** This is where you add the API key from your Ollama Server (BEARER)
 -  **API Type:** The plugin can only use either the Chat API or the Assistant API globally; this selector allows an admin to switch between which API is active. The rest of the settings on this page will change based on which is selected.
 -  **Restrict chat usage to logged-in users:** If this box is checked, only logged-in users will be able to use the chat box.
 -  **Assistant name:** When the Chat API is enabled, the AI will use this name for itself in the conversation. It is also always used for the UI headings in the chat window.
@@ -100,5 +100,5 @@ Assistant: Thursday, March 16.
 User: What about section 4?
 Assistant:"
 ```
-
-Maintained by [Bryce Yoder](https://bryceyoder.com). Also check out [OpenAI Question Generator](https://moodle.org/plugins/block_openai_questions)!
+Maintained by [RAGCon GmbH i.G.](http://www.ragcon.ai)
+Original Plugin block_openai_chat maintained by [Bryce Yoder](https://bryceyoder.com).

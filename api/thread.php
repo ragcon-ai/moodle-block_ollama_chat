@@ -17,21 +17,22 @@
 /**
  * API endpoint for retrieving thread history
  *
- * @package    block_openai_chat
+ * @package    block_ollama_chat
+ * @copyright  2025 RAGCon <info@ragcon.ai>
  * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @original   Forked from block_openai_chat by Bryce Yoder <me@bryceyoder.com>
  */
-
 require_once('../../../config.php');
 require_once($CFG->libdir . '/filelib.php');
-require_once($CFG->dirroot . '/blocks/openai_chat/lib.php');
+require_once($CFG->dirroot . '/blocks/ollama_chat/lib.php');
 
-if (get_config('block_openai_chat', 'restrictusage') !== "0") {
+if (get_config('block_ollama_chat', 'restrictusage') !== "0") {
     require_login();
 }
 
 $thread_id = required_param('thread_id', PARAM_NOTAGS);
-$apikey = get_config('block_openai_chat', 'apikey');
+$apikey = get_config('block_ollama_chat', 'apikey');
 
 $curl = new \curl();
 $curl->setopt(array(
@@ -42,7 +43,8 @@ $curl->setopt(array(
     ),
 ));
 
-$response = $curl->get("https://api.openai.com/v1/threads/$thread_id/messages");
+$apiendpoint = get_config('block_ollama_chat', 'apiendpoint');
+$response = $curl->get($apiendpoint."/v1/threads/$thread_id/messages");
 $response = json_decode($response);
 
 if (property_exists($response, 'error')) {

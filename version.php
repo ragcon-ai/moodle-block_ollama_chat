@@ -17,14 +17,16 @@
 /**
  * Version information
  *
- * @package    block_openai_chat
- * @copyright  2022 Bryce Yoder <me@bryceyoder.com>
+ * @package    block_ollama_chat
+ * @copyright  2025 RAGCon <info@ragcon.ai>
+ * @copyright  2023 Bryce Yoder <me@bryceyoder.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @original   Forked from block_openai_chat by Bryce Yoder <me@bryceyoder.com>
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'block_openai_chat';
+$plugin->component = 'block_ollama_chat';
 $plugin->version = 2025021700;
 $plugin->requires = 2022041600;
 $plugin->maturity = MATURITY_STABLE;
