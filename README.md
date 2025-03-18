@@ -20,10 +20,8 @@ The global block settings can be found by going to Site Administration > Plugins
 -  **User name:** When the Chat API is enabled, the AI will use this name for the user in the conversation. Both this and the above option can be used to influence the persona and responses of the AI. It is also always used for the UI headings in the chat window.
 -  **Enable logging:** Checking this box will record all messages sent by users along with the AI response. When logging is enabled, a recording icon is displayed in the block to indicate to users that their messages are being saved. Interactions with the AI can be found at Site Administration > Reports > OpenAI Chat Logs.
   
-### Assistant API settings
-These settings only appear when "Assistant" is chosen as the API Type
--  **Assistant:** Which assistant to set as the global default. The list is pulled from your OpenAI account, and can be changed at a per-block level if instance-level settings are enabled.
--  **Persist conversations:** If this is enabled, a user's conversations will be carried between page loads within the same context. For example, a user can start a conversation with the assistant on a main course page, and then refresh the page or navigate to another course page that contains the same block instance, and continue the same conversation. A block instance in a different context, such as the Dashboard, will not load the same conversation, however.
+### Assistant API 
+Assistants API is currently not supported by this fork / Ollama.
 
 ### Chat API settings
 These settings only appear when "Chat" is chosen as the API Type
@@ -58,9 +56,6 @@ If "Instance-level settings" is checked in the global block settings, the follow
   - For more information on advanced settings, please see Ollama documentation.
     
 Note that any instance-level settings that are blank will default to the global block settings.
-
-# Using the Assistant API
-Assistants API is currently not supported by this fork / Ollama.
 
 # Using the Chat API
 
