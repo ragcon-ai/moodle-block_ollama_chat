@@ -53,13 +53,14 @@ If "Instance-level settings" is checked in the global block settings, the follow
 - **Assistant:** (Only available with Assistant API) Which assistant to use for this block. The list is pulled from the OpenAI account corresponding to the API key set on this block instance (or globally if not specified for this specific block).
 - **Persist conversations:** (Only available with Assistant API) This can be used to enable or disable this feature at a per-block level. See above for more information on this feature.
 - **Advanced:** These are extra, advanced parameters to adjust the behavior of the model
-  - **OpenAI API Key:** This allows a separate API key to be used on individual block instances
-  - For more information on advanced settings, please see OpenAI documentation.
+  - **Ollama API Endpoint:** This allows a separate API Endpoint to be used on individual block instances
+  - **Ollama API Key:** This allows a separate API key to be used on individual block instances
+  - For more information on advanced settings, please see Ollama documentation.
     
 Note that any instance-level settings that are blank will default to the global block settings.
 
 # Using the Assistant API
-Assistants can be managed in your OpenAI account [here](https://platform.openai.com/assistants). The plugin will pull from your list of assistants to allow you to select the one you want to use. If an API key is set at the per-block level, the list of assistants will be pulled from the given account instead of the default.
+Assistants API is currently not supported by this fork / Ollama.
 
 # Using the Chat API
 

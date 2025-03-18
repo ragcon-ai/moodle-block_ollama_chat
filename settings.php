@@ -71,7 +71,7 @@ if ($hassiteconfig) {
             get_string('type', 'block_ollama_chat'),
             get_string('typedesc', 'block_ollama_chat'),
             'chat',
-            ['chat' => 'chat', 'assistant' => 'assistant', 'azure' => 'azure']
+            ['chat' => 'chat']
         ));
 
         $settings->add(new admin_setting_configcheckbox(
@@ -214,12 +214,12 @@ if ($hassiteconfig) {
         if ($type === 'assistant') {
 
         } else {
-            $settings->add(new admin_setting_configselect(
+            $settings->add(new admin_setting_configtext(
                 'block_ollama_chat/model',
                 get_string('model', 'block_ollama_chat'),
                 get_string('modeldesc', 'block_ollama_chat'),
-                'text-davinci-003',
-                get_models()['models']
+                'llama3.2:3b',
+                PARAM_TEXT
             ));
 
             $settings->add(new admin_setting_configtext(

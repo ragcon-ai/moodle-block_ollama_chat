@@ -35,7 +35,7 @@ class block_ollama_chat_edit_form extends block_edit_form {
         $mform->addElement('header', 'config_header', get_string('blocksettings', 'block'));
 
         $mform->addElement('text', 'config_title', get_string('blocktitle', 'block_ollama_chat'));
-        $mform->setDefault('config_title', 'OpenAI Chat');
+        $mform->setDefault('config_title', 'Ollama Chat');
         $mform->setType('config_title', PARAM_TEXT);
 
         $mform->addElement('advcheckbox', 'config_showlabels', get_string('showlabels', 'block_ollama_chat'));
@@ -102,13 +102,18 @@ class block_ollama_chat_edit_form extends block_edit_form {
                 $mform->addHelpButton('config_assistantname', 'config_assistantname', 'block_ollama_chat');
     
                 $mform->addElement('header', 'config_adv_header', get_string('advanced', 'block_ollama_chat'));
-    
+
+                $mform->addElement('text', 'config_apiendpoint', get_string('apiendpoint', 'block_ollama_chat'));
+                $mform->setDefault('config_apiendpoint', '');
+                $mform->setType('config_apiendpoint', PARAM_TEXT);
+                $mform->addHelpButton('config_apiendpoint', 'config_apiendpoint', 'block_ollama_chat');
+
                 $mform->addElement('text', 'config_apikey', get_string('apikey', 'block_ollama_chat'));
                 $mform->setDefault('config_apikey', '');
                 $mform->setType('config_apikey', PARAM_TEXT);
                 $mform->addHelpButton('config_apikey', 'config_apikey', 'block_ollama_chat');
     
-                $mform->addElement('select', 'config_model', get_string('model', 'block_ollama_chat'), get_models()['models']);
+                $mform->addElement('text', 'config_model', get_string('model', 'block_ollama_chat'));
                 $mform->setDefault('config_model', get_config('block_ollama_chat', 'model'));
                 $mform->setType('config_model', PARAM_TEXT);
                 $mform->addHelpButton('config_model', 'config_model', 'block_ollama_chat');
